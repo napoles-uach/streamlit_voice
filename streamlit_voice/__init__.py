@@ -1,11 +1,6 @@
-import streamlit as st
 import streamlit.components.v1 as components
 
-# Crear el componente personalizado
-_component_func = components.declare_component("voice", path="")
-
-# Definir la función del componente
-def voice(name=None, key=None):
+def voice():
     _COMPONENT_HTML = """
     <!DOCTYPE html>
     <html lang="en">
@@ -41,15 +36,17 @@ def voice(name=None, key=None):
             }
 
             function sendToStreamlit(text) {
-                const data = {
-                    text: text
-                };
-                const streamlitComponent = window.parent.streamlitComponent;
-                streamlitComponent.sendMessage(data);
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = `data:text/plain,${text}`;
+                document.body.appendChild(iframe);
+                setTimeout(() => {
+                    iframe.remove();
+                }, 1000);
             }
         </script>
     </body>
     </html>
     """
-    component_value = _component_func(name=name, key=key, default="", html=_COMPONENT_HTML, height=300)
-    return component_value
+    return components.html(_COMPONENT_HTML, height=300)
+
