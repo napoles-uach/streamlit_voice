@@ -38,7 +38,7 @@ def voice():
             function sendToStreamlit(text) {
                 const iframe = document.createElement('iframe');
                 iframe.style.display = 'none';
-                iframe.src = `data:text/plain,${text}`;
+                iframe.src = `/echo?text=${encodeURIComponent(text)}`;
                 document.body.appendChild(iframe);
                 setTimeout(() => {
                     iframe.remove();
@@ -49,4 +49,3 @@ def voice():
     </html>
     """
     return components.html(_COMPONENT_HTML, height=300)
-
